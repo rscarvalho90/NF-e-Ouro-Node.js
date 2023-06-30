@@ -7,4 +7,5 @@ exports.AmbienteEnum = void 0;
 var AmbienteEnum;
 (function (AmbienteEnum) {
     AmbienteEnum["HOMOLOGACAO"] = "https://hom-nfoe.estaleiro.serpro.gov.br/API";
+    AmbienteEnum["PRODUCAO"] = "https://nfeouro.rfb.gov.br/API";
 })(AmbienteEnum || (exports.AmbienteEnum = AmbienteEnum = {}));
