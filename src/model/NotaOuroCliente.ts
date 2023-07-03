@@ -1,5 +1,5 @@
 import {AmbienteEnum} from "../enum/AmbienteEnum";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import fs from "fs";
 import pem, {Pkcs12ReadResult} from "pem";
 import SignedXml from "xml-crypto"
@@ -24,7 +24,7 @@ export class NotaOuroCliente {
      * @param xmlPath Path (local, caminho) do arquivo XML a ser enviado.
      * @return
      */
-    async enviaDao(xmlPath: string) {
+    async enviaDao(xmlPath: string): Promise<AxiosResponse<any, any>> {
         let xmlAssinado = await this.assinaXml(xmlPath);
 
         xmlAssinado = this.finalizaXml(xmlAssinado);
@@ -40,7 +40,7 @@ export class NotaOuroCliente {
      *
      * @param nsuRecepcao NSU da NF-e Ouro.
      */
-    async consultaPorNsu(nsuRecepcao: number) {
+    async consultaPorNsu(nsuRecepcao: number): Promise<AxiosResponse<any, any>> {
 
         return await axios.get(this.ambiente + "/nsu/" + nsuRecepcao + "/nfeouro",
             await this.getConfiguracoesHttpAxios());
@@ -51,7 +51,7 @@ export class NotaOuroCliente {
      *
      * @param chaveAcesso Chave de acesso da NF-e Ouro.
      */
-    async consultaPorChave(chaveAcesso: string) {
+    async consultaPorChave(chaveAcesso: string): Promise<AxiosResponse<any, any>> {
         return await axios.get(this.ambiente + "/nfeouro/" + chaveAcesso,
             await this.getConfiguracoesHttpAxios());
     }
@@ -97,7 +97,7 @@ export class NotaOuroCliente {
      * Retorna as configurações HTTP do Axios.
      * @private
      */
-    private async getConfiguracoesHttpAxios() {
+    private async getConfiguracoesHttpAxios(): Promise<any> {
         // Importa um certificado tipo A1
         const certBuffer: Buffer = fs.readFileSync(this.pathCertificado);
         const dadosPkcs12 = await this.getDadosPkcs12(certBuffer);
@@ -175,7 +175,7 @@ export class NotaOuroCliente {
      *
      * @private
      */
-    private async getIp() {
+    private async getIp(): Promise<string> {
         let jsonResposta = (await axios.get("https://api.myip.com")).data;
 
         return jsonResposta["ip"] as string;
